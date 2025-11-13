@@ -2,4 +2,4 @@ train: C:\Users\matia\OneDrive\IFTS\Procesamiendo de imagenes v2\dataset/images/
 val: C:\Users\matia\OneDrive\IFTS\Procesamiendo de imagenes v2\dataset/images/val
 
 nc: 1
-names: ['ave']
+names: ['objeto']
