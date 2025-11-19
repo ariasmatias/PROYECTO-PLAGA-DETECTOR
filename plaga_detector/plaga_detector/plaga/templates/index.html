@@ -2,16 +2,99 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Plaga Detector</title>
-</head>
-<body>
-    <h1>Detector de Plagas</h1>
-    <p>Subí una imagen y luego vamos a procesarla con el modelo.</p>
+    <title>Detector de Plagas</title>
 
-    <form action="/procesar/" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="imagen" accept="image/*" required>
-        <button type="submit">Enviar</button>
-    </form>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            width: 380px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 26px;
+            color: #333;
+        }
+
+        p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            background: #4A6EE0;
+            border: none;
+            padding: 12px;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background: #3a59b5;
+        }
+
+        .preview {
+            margin-top: 15px;
+            max-width: 100%;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>Detector de Plagas</h1>
+        <p>Subí una imagen y analizaremos si contiene plagas.</p>
+
+        <form action="/procesar/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="file" id="imagen" name="imagen" accept="image/*" required>
+            <img id="preview" class="preview">
+
+            <button type="submit">Procesar Imagen</button>
+        </form>
+    </div>
+
+    <script>
+        // Vista previa de la imagen
+        document.getElementById("imagen").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            let preview = document.getElementById("preview");
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            }
+        });
+    </script>
+
 </body>
 </html>

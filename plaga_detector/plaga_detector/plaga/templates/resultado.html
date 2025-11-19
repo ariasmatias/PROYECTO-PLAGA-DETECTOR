@@ -2,33 +2,154 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Resultado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado – Plaga Detector</title>
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            color: #2c3e50;
+            font-size: 2rem;
+        }
+
+        .card {
+            background: #fff;
+            width: 90%;
+            max-width: 700px;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        .image-box {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #fafafa;
+            border-left: 4px solid #2c3e50;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 0.8rem 1.4rem;
+            background: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #1a252f;
+        }
+    </style>
 </head>
+
 <body>
+
     <h1>Resultado del Detector de Plagas</h1>
 
-    <h2>Imagen original</h2>
-    <img src="/media/{{ filename }}" width="400">
+    <!-- Imagen original -->
+    <div class="card">
+        <h2>Imagen original</h2>
+        <div class="image-box">
+            <img src="/media/{{ filename }}" alt="Imagen original">
+        </div>
+    </div>
 
-    <h2>Imagen procesada</h2>
-    <img src="/media/{{ processed }}" width="400">
+    <!-- Imagen procesada -->
+    <div class="card">
+        <h2>Imagen procesada</h2>
+        <div class="image-box">
+            <img src="/media/{{ processed }}" alt="Imagen procesada">
+        </div>
+    </div>
 
-    <h3>Detecciones:</h3>
-    {% if detecciones %}
+    <!-- Detecciones -->
+    <div class="card">
+        <h2>Detecciones</h2>
+
+        {% if detecciones %}
         <ul>
-        {% for det in detecciones %}
-            <li>
-                #{{ det.id }}
-                <br>Caja: {{ det.bbox }}
-                <br>Clase: {{ det.clase }}
-                <br>Confianza: {{ det.conf }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No se detectaron objetos.</p>
-    {% endif %}
+            {% for det in detecciones %}
+                <li>
+                    <strong>Detección #{{ det.id }}</strong><br>
+                    <strong>Caja:</strong> {{ det.bbox }}<br>
+                    <strong>Clase YOLO:</strong> {{ det.clase }}<br>
+                    <strong>Confianza:</strong> {{ det.conf }}<br><br>
 
-    <a href="/">Volver</a>
+                    <!-- 🔥 BLOQUE CORREGIDO PARA MOSTRAR HUGGINGFACE -->
+                    {% if det.huggingface %}
+                        
+                        {% if det.huggingface.0 %}
+                            <!-- Caso: HuggingFace devuelve una LISTA -->
+                            <strong>Clasificación HF:</strong>
+                            {{ det.huggingface.0.label }}
+                            ({{ det.huggingface.0.score|floatformat:2 }})
+                        
+                        {% elif det.huggingface.label %}
+                            <!-- Caso: HuggingFace devuelve un OBJETO -->
+                            <strong>Clasificación HF:</strong>
+                            {{ det.huggingface.label }}
+                            ({{ det.huggingface.score|floatformat:2 }})
+
+                        {% elif det.huggingface.error %}
+                            <!-- Caso: Error en HuggingFace -->
+                            <em>Error HF: {{ det.huggingface.error }}</em>
+
+                        {% else %}
+                            <!-- Caso: Respuesta inesperada -->
+                            <em>Respuesta HF desconocida</em>
+                        {% endif %}
+
+                    {% else %}
+                        <em>Sin predicción de HuggingFace</em>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No se detectaron objetos.</p>
+        {% endif %}
+    </div>
+
+    <!-- Botón volver -->
+    <a href="/" class="back-btn">Volver</a>
+
 </body>
 </html>

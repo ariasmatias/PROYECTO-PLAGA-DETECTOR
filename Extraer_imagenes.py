@@ -11,7 +11,7 @@ output_dir = "set_extraido"
 os.makedirs(output_dir, exist_ok=True)  # Crear carpeta si no existe
 
 # Cantidad de imágenes aleatorias a extraer
-n = 5
+n = 30
 
 # Abrimos el ZIP
 with zipfile.ZipFile(zip_path, 'r') as z:

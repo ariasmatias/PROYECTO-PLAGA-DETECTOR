@@ -1,2 +1,5 @@
 set_prueba.zip
 .env
+.venv/
+venv/
+env/
