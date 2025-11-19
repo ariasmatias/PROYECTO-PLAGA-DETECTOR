@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+    <h1>Resultado del Detector de Plagas</h1>
+
+    <h2>Imagen original</h2>
+    <img src="/media/{{ filename }}" width="400">
+
+    <h2>Imagen procesada</h2>
+    <img src="/media/{{ processed }}" width="400">
+
+    <h3>Detecciones:</h3>
+    {% if detecciones %}
+        <ul>
+        {% for det in detecciones %}
+            <li>
+                #{{ det.id }}
+                <br>Caja: {{ det.bbox }}
+                <br>Clase: {{ det.clase }}
+                <br>Confianza: {{ det.conf }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se detectaron objetos.</p>
+    {% endif %}
+
+    <a href="/">Volver</a>
+</body>
+</html>

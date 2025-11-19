@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Plaga Detector</title>
+</head>
+<body>
+    <h1>Detector de Plagas</h1>
+    <p>Subí una imagen y luego vamos a procesarla con el modelo.</p>
+
+    <form action="/procesar/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="imagen" accept="image/*" required>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
